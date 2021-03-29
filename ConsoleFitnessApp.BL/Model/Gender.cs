@@ -6,20 +6,10 @@ namespace ConsoleFitnessApp.BL.Model
 
     public class Gender
     {
-        private string name;
-
         /// <summary>
         /// Наименование пола 
         /// </summary>
-        public string Name
-        {
-            get { return name; }
-            private set
-            {
-                if (value is String) { name = value; }
-                else throw new Exception($"Некорректный тип {nameof(Name)}");
-            }
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// Конструктор 
@@ -34,7 +24,7 @@ namespace ConsoleFitnessApp.BL.Model
 
         public override string ToString()
         {
-            return $"Gender Name {name}"; 
+            return $"Gender Name {Name}"; 
         }
     }
 }

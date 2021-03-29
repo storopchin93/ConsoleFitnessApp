@@ -12,29 +12,61 @@ namespace ConsoleFitnessApp.CMD
     {
         static void Main(string[] args)
         {
-            Console.Write("Введите имя пользователя");
 
+            Console.Write("Введите имя пользователя:  ");
             var name = Console.ReadLine();
-
-            Console.Write("Введите пол: ");
-            var gender = Console.ReadLine();
-
-            Console.Write("Введите дату рождения: ");
-            var dateBirthDay = DateTime.Parse(Console.ReadLine());
-
-            Console.Write("Введите вес: ");
-            var wieght = Single.Parse(Console.ReadLine());
-
-            Console.Write("Введите рост: ");
-            var hieght = Single.Parse(Console.ReadLine());
-
-            var userController = new UserController(name, gender, dateBirthDay, wieght, hieght);
-            userController.Save();
+            var userController = new UserController(name);
 
 
+            if (userController.IsNewUser)
+            {
+                Console.Write("Введите пол: ");
+                var gender = Console.ReadLine();
+                var dateBirthDay = ParseDateTime("дату рождения", "даты");
+                var wieght = ParseFloat("вес", "веса");
+                var hieght = ParseFloat("рост", "роста");
 
+                userController.SetNewUsersDate(gender, dateBirthDay, wieght, hieght);
 
+            }
+            Console.WriteLine(userController.CurrentUser);
             Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Обработка ввода значения с плавующей запятой.
+        /// </summary>
+        /// <param name="name">Наименование значения.</param>
+        /// <param name="exceptionFormat">Наменование при ошибке.</param>
+        /// <returns>Значение с плавующей запятой.</returns>
+        private static float ParseFloat(string name, string exceptionFormat)
+        {
+            Console.Write($"Введите {name}: ");
+            float value;
+            while (true)
+            {
+                if (Single.TryParse(Console.ReadLine(), out value)) break;
+                else Console.WriteLine($"Неправильный формат {exceptionFormat}");
+            }
+            return value;
+        }
+        /// <summary>
+        /// Обработка ввода даты.
+        /// </summary>
+        /// <param name="name">Наименование значения.</param>
+        /// <param name="exceptionFormat">Наменование при ошибке.</param>
+        /// <returns>Дата.</returns>
+        private static DateTime ParseDateTime(string name, string exceptionFormat)
+        {
+            Console.Write($"Введите {name}: ");
+            DateTime value;
+            while (true)
+            {
+
+                if (DateTime.TryParse(Console.ReadLine(), out value)) break;
+                else Console.WriteLine($"Неправильный формат {exceptionFormat}");
+            }
+            return value;
         }
     }
 }

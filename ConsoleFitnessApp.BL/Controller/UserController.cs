@@ -9,9 +9,12 @@ using System.Threading.Tasks;
 
 namespace ConsoleFitnessApp.BL.Controller
 {
-    public class UserController
+    /// <summary>
+    /// Контроллер пользователя.
+    /// </summary>
+    public class UserController : ControllerBase
     {
-
+        private const string USERS_FILE_NAME = "users.bin";
         /// <summary>
         /// Список пользователей.
         /// </summary>
@@ -25,7 +28,6 @@ namespace ConsoleFitnessApp.BL.Controller
         /// </summary>
         public bool IsNewUser { get; } = false;
 
-
         /// <summary>
         /// Создание контроллера пользователя.
         /// </summary>
@@ -36,7 +38,6 @@ namespace ConsoleFitnessApp.BL.Controller
             Users = GetUsersData();
     
             CurrentUser = Users.SingleOrDefault(user => user.Name == userName);
-
             if (CurrentUser == null)
             {
                 CurrentUser = new User(userName);
@@ -45,7 +46,6 @@ namespace ConsoleFitnessApp.BL.Controller
                 Save();
             }
         }
-
 
         /// <summary>
         /// Записать в БД нового пользователя.
@@ -63,7 +63,7 @@ namespace ConsoleFitnessApp.BL.Controller
             CurrentUser.DateBirthday = dateBirthday;
             CurrentUser.Wieght = wieght;
             CurrentUser.Hieght = hieght;
-            Save();
+            SetData("users.bin", Users);
         }
 
         /// <summary>
@@ -72,31 +72,17 @@ namespace ConsoleFitnessApp.BL.Controller
         /// <returns>Список пользователей.</returns>
         private List<User> GetUsersData()
         {
-            var binaryFormatter = new BinaryFormatter();
-            using (var loadStream = new FileStream(@"users.bin", FileMode.Open))
-            {
-                if (binaryFormatter.Deserialize(loadStream) is List<User> users)
-                {
-                    return users;
-                }
-                else
-                {
-                    return new List<User>();       
-                }
-            }
+            return GetData<List<User>>(USERS_FILE_NAME) ?? new List<User>();
         }
 
         /// <summary>
         /// Сохранение пользователей.
         /// </summary>
-        private void Save()
+        public void Save()
         {
-            var binaryFormatter = new BinaryFormatter();
-            using (var saveStream = new FileStream(@"users.bin", FileMode.OpenOrCreate))
-            {
-                binaryFormatter.Serialize(saveStream, Users);
-            }
+            SetData(USERS_FILE_NAME, Users);
         }
+
 
     }
 } 

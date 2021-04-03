@@ -12,12 +12,63 @@ namespace ConsoleFitnessApp.CMD
     {
         static void Main(string[] args)
         {
-
             Console.Write("Введите имя пользователя:  ");
             var name = Console.ReadLine();
             var userController = new UserController(name);
+            var eatingController = new EatingController(userController.CurrentUser);
 
 
+            CreateNewUser(userController);
+            Console.WriteLine(userController.CurrentUser);
+
+            Console.WriteLine("Что вы хотите сделать");
+            Console.WriteLine("1 - Ввести прием пищи");
+            var key = Console.ReadKey();
+            Console.WriteLine();
+
+            while (true)
+            {
+                if (key.Key == ConsoleKey.D1)
+                {
+                    var foods = EnterEating();
+                    eatingController.AddFood(foods.Food,foods.Weight);
+
+
+                    foreach (var item in eatingController.Eating.Foods)
+                    {
+                        Console.WriteLine($"\t{ item.Key} - {item.Value}");
+                    }
+                    break;
+                }    
+            } 
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Ввести прием пищи.
+        /// </summary>
+        /// <returns>Продукт, вес продукта.</returns>
+        private static (Food Food, float Weight) EnterEating()
+        {
+            Console.Write("Введите имя продукта: ");
+            var foodName = Console.ReadLine();
+            var calories = ParseFloat("калорийность", "поля - калории");
+            var proteins = ParseFloat("кол-во протеинов", "поля - протеины");
+            var fats = ParseFloat("кол-во жиров", "поля - жиры");
+            var carbohydrates = ParseFloat("кол-во углеводов", "поля - углеводы");
+            var weight = ParseFloat("вес порции", "веса");
+
+            return ((new Food(foodName,calories,fats,proteins,carbohydrates)), weight);
+
+        }
+
+
+        /// <summary>
+        /// Добавить нового пользователя
+        /// </summary>
+        /// <param name="userController">Контроллер пользователя</param>
+        private static void CreateNewUser(UserController userController)
+        {
             if (userController.IsNewUser)
             {
                 Console.Write("Введите пол: ");
@@ -27,14 +78,10 @@ namespace ConsoleFitnessApp.CMD
                 var hieght = ParseFloat("рост", "роста");
 
                 userController.SetNewUsersDate(gender, dateBirthDay, wieght, hieght);
-
             }
-            Console.WriteLine(userController.CurrentUser);
-            Console.ReadKey();
         }
-
         /// <summary>
-        /// Обработка ввода значения с плавующей запятой.
+        /// Обработать ввод значения с плавующей запятой.
         /// </summary>
         /// <param name="name">Наименование значения.</param>
         /// <param name="exceptionFormat">Наменование при ошибке.</param>
@@ -51,7 +98,7 @@ namespace ConsoleFitnessApp.CMD
             return value;
         }
         /// <summary>
-        /// Обработка ввода даты.
+        /// Обработать ввод даты.
         /// </summary>
         /// <param name="name">Наименование значения.</param>
         /// <param name="exceptionFormat">Наменование при ошибке.</param>

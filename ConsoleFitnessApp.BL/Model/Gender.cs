@@ -2,22 +2,24 @@
 
 namespace ConsoleFitnessApp.BL.Model
 {
+    /// <summary>
+    /// Пол.
+    /// </summary>
     [Serializable]
-
     public class Gender
     {
         /// <summary>
-        /// Наименование пола 
+        /// Наименование пола.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Конструктор 
+        /// Конструктор пола. 
         /// </summary>
         /// <param name="name">Наименование пола</param>
         public Gender(string name)
         {
-            if (string.IsNullOrWhiteSpace(name)) 
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException($"Имя пола должно быть заполнено {nameof(name)}");
             Name = name;
         }
 

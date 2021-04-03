@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace ConsoleFitnessApp.BL.Model
 {
+   /// <summary>
+   /// Пользователь.
+   /// </summary>
     [Serializable]
     public class User
     {
-
 
         #region Свойства
         /// <summary>
@@ -85,10 +87,9 @@ namespace ConsoleFitnessApp.BL.Model
             Hieght = hieght;
         }
 
-
         public override string ToString()
         {
-            return Name + " " + Age;
+            return Name + " " + Age + " " + Gender.Name;
         }
     }
 }

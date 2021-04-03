@@ -21,7 +21,7 @@ namespace ConsoleFitnessApp.BL.Controller.Tests
             var random = new Random(DateTime.Now.Millisecond);
             UserController userController = new UserController(nameUser);
             EatingController eatingController = new EatingController(userController.CurrentUser);
-            Food food = new Food(nameFood, random.Next(30,200), random.Next(30, 200), random.Next(30, 200), random.Next(30, 200));
+            Food food = new Food(nameFood, random.Next(30, 200), random.Next(30, 200), random.Next(30, 200), random.Next(30, 200));
 
             //Act
 

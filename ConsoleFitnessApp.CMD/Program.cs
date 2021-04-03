@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using ConsoleFitnessApp.BL.Controller;
@@ -12,7 +14,10 @@ namespace ConsoleFitnessApp.CMD
     {
         static void Main(string[] args)
         {
-            Console.Write("Введите имя пользователя:  ");
+            var culture = CultureInfo.CreateSpecificCulture("en-us");
+            var resManager = new ResourceManager("ConsoleFitnessApp.CMD.Lang.Messages", typeof(Program).Assembly);
+            Console.WriteLine(resManager.GetString("Hello", culture));
+            Console.Write(resManager.GetString("EnterUserName", culture));
             var name = Console.ReadLine();
             var userController = new UserController(name);
             var eatingController = new EatingController(userController.CurrentUser);
@@ -24,6 +29,7 @@ namespace ConsoleFitnessApp.CMD
             Console.WriteLine("Что вы хотите сделать");
             Console.WriteLine("1 - Ввести прием пищи");
             var key = Console.ReadKey();
+
             Console.WriteLine();
 
             while (true)

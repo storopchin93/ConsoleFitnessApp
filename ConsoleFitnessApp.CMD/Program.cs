@@ -14,41 +14,76 @@ namespace ConsoleFitnessApp.CMD
     {
         static void Main(string[] args)
         {
+            //Параметры локализации
             var culture = CultureInfo.CreateSpecificCulture("en-us");
             var resManager = new ResourceManager("ConsoleFitnessApp.CMD.Lang.Messages", typeof(Program).Assembly);
+
             Console.WriteLine(resManager.GetString("Hello", culture));
             Console.Write(resManager.GetString("EnterUserName", culture));
             var name = Console.ReadLine();
+
             var userController = new UserController(name);
             var eatingController = new EatingController(userController.CurrentUser);
+            var exerciseController = new ExerciseController(userController.CurrentUser);
+
 
 
             CreateNewUser(userController);
             Console.WriteLine(userController.CurrentUser);
 
-            Console.WriteLine("Что вы хотите сделать");
-            Console.WriteLine("1 - Ввести прием пищи");
-            var key = Console.ReadKey();
 
             Console.WriteLine();
 
             while (true)
             {
-                if (key.Key == ConsoleKey.D1)
+
+                Console.WriteLine("Что вы хотите сделать");
+                Console.WriteLine("1 - Ввести прием пищи");
+                Console.WriteLine("2 - Ввести упражнение");
+                Console.WriteLine("Q - Выйти");
+                var key = Console.ReadKey();
+
+                switch (key.Key)
                 {
-                    var foods = EnterEating();
-                    eatingController.AddFood(foods.Food,foods.Weight);
+                    case ConsoleKey.D1:
+                        var foods = EnterEating();
+                        eatingController.AddFood(foods.Food, foods.Weight);
+                        foreach (var item in eatingController.Eating.Foods)
+                        {
+                            Console.WriteLine($"\t{ item.Key} - {item.Value}");
+                        }
+                        break;
 
-
-                    foreach (var item in eatingController.Eating.Foods)
-                    {
-                        Console.WriteLine($"\t{ item.Key} - {item.Value}");
-                    }
-                    break;
-                }    
+                    case ConsoleKey.D2:
+                        var exe = EnterExercise();
+                        var exercise = new Exercise(exe.start, exe.finish, exe.activity, userController.CurrentUser);
+                        exerciseController.Add(exe.activity, exe.start, exe.finish);
+                        foreach (var item in exerciseController.Exercises)
+                        {
+                            Console.WriteLine($"\t{item.Activity} c {item.Start.ToShortTimeString()} до {item.Finish.ToShortTimeString()}");
+                        }
+                        break;
+                    case ConsoleKey.Q:
+                        Environment.Exit(0);
+                        break;
+                }
+                Console.WriteLine("Некорректный ввод");                
             } 
-            Console.ReadKey();
         }
+
+        private static (DateTime start, DateTime finish, Activity activity) EnterExercise()
+        {
+            Console.Write("Введите название упражнения: ");
+            var exerName = Console.ReadLine();
+            var energy = ParseFloat("расход энергии в минуту", "расхода энергии в минуту");
+
+            var start = ParseDateTime("Время начала упражения", "даты начала упражения");
+            var finish = ParseDateTime("Время окончания упражения", "даты начала упражения");
+
+            var activity = new Activity(exerName, energy);
+            return (start, finish, activity);
+        }
+
 
         /// <summary>
         /// Ввести прием пищи.
@@ -63,11 +98,9 @@ namespace ConsoleFitnessApp.CMD
             var fats = ParseFloat("кол-во жиров", "поля - жиры");
             var carbohydrates = ParseFloat("кол-во углеводов", "поля - углеводы");
             var weight = ParseFloat("вес порции", "веса");
-
-            return ((new Food(foodName,calories,fats,proteins,carbohydrates)), weight);
+            return (new Food(foodName,calories,fats,proteins,carbohydrates), weight);
 
         }
-
 
         /// <summary>
         /// Добавить нового пользователя
@@ -86,6 +119,7 @@ namespace ConsoleFitnessApp.CMD
                 userController.SetNewUsersDate(gender, dateBirthDay, wieght, hieght);
             }
         }
+
         /// <summary>
         /// Обработать ввод значения с плавующей запятой.
         /// </summary>
@@ -103,6 +137,7 @@ namespace ConsoleFitnessApp.CMD
             }
             return value;
         }
+
         /// <summary>
         /// Обработать ввод даты.
         /// </summary>

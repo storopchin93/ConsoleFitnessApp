@@ -13,7 +13,11 @@ namespace ConsoleFitnessApp.BL.Controller
     /// </summary>
     public abstract class ControllerBase
     {
-
+        /// <summary>
+        /// Записать данные.
+        /// </summary>
+        /// <param name="fileName">Название файла.</param>
+        /// <param name="value">Тип файла.</param>
         protected void SetData (string fileName, object value)
         {
             var binaryFormatter = new BinaryFormatter();
@@ -23,6 +27,12 @@ namespace ConsoleFitnessApp.BL.Controller
             }
         }
 
+        /// <summary>
+        /// Получить данные
+        /// </summary>
+        /// <typeparam name="T">Тип параметра.</typeparam>
+        /// <param name="fileName">Название файла.</param>
+        /// <returns></returns>
         protected T GetData<T> (string fileName)
         {
             var binaryFormatter = new BinaryFormatter();

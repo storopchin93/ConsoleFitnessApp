@@ -32,10 +32,6 @@ namespace ConsoleFitnessApp.BL.Controller.Tests
             Assert.AreEqual(birthDate, userController.CurrentUser.DateBirthday);
             Assert.AreEqual(wieght, userController.CurrentUser.Wieght);
             Assert.AreEqual(hieght, userController.CurrentUser.Hieght);
-
-
-
-
         }
 
         [TestMethod()]

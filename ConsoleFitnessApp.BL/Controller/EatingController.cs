@@ -54,13 +54,12 @@ namespace ConsoleFitnessApp.BL.Controller
             {
                 Foods.Add(food);
                 Eating.AddFoodToEating(food, weight);
-                SetAll();
             }
             else
             {
                 Eating.AddFoodToEating(product, weight);
-                SetAll();
             }
+            SetAll();
         }
 
 
